@@ -54,7 +54,7 @@ public class sqlProcess_Type {
         
         try{
             conn = sConn.getConnection();
-            pstt = conn.prepareStatement("SELECT id,process_type FROM tbl_ProcessType WHERE process_type LIKE = ?");
+            pstt = conn.prepareStatement("SELECT id,process_type FROM tbl_ProcessType WHERE process_type LIKE ?");
             pstt.setString(1, "%"+_process_type.getProcess_type()+"%");
             rs = pstt.executeQuery();
             

@@ -6,12 +6,15 @@ package com.mycompany.flow_task.task;
 
 import com.mycompany.flow_task.frmHome;
 import com.mycompany.flow_task.employee.employee;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,12 +35,21 @@ public class frmTaskList extends javax.swing.JInternalFrame {
         txtUserID.setText(this._employee.getId() + "");
         setListIcon();
         refresh();
+        
+        timer.start();
     }
 
     employee _employee;
     taskProcess _taskProcess = new taskProcess();
     sqlTask sTask = new sqlTask();
     LocalDateTime dtStart, dtEnd;
+    
+    Timer timer = new Timer(60_000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refresh();
+            }
+        });
 
     private void setListIcon() {
         tblList.setModel(new DefaultTableModel(new Object[][]{}, new String[]{"İş No", "Müşteri No", "Müşteri Adı", "Müşteri Şikayeti", "İşlem", "Başlık", "Gönderilen Çalışan ID", "Gönderilen Çalışan Adı", "İşlem Sayısı", "İş Açılış Tarihi"}));
@@ -45,10 +57,7 @@ public class frmTaskList extends javax.swing.JInternalFrame {
         btnOpenTask.setIcon(new ImageIcon(getClass().getResource("/resources/read.png")));
         btnRefresh.setIcon(new ImageIcon(getClass().getResource("/resources/refresh.png")));
     }
-
-    /*private void refresh(){
-        sTask.getTableList(tblList);
-    }*/
+    
     private void refresh() {
         try {
             dtStart = LocalDate.parse(txtFirstDate.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
@@ -97,6 +106,23 @@ public class frmTaskList extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
         setTitle("İş Takip");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formİnternalFrameClosed(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -340,6 +366,11 @@ public class frmTaskList extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void formİnternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formİnternalFrameClosed
+        // TODO add your handling code here:
+        timer.stop();
+    }//GEN-LAST:event_formİnternalFrameClosed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
